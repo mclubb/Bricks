@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Bricks</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="basic_vertex_shader">attribute vec4 aPosition;
+                uniform mat4 uMatrix;
+                attribute vec2 aTextCoord;
+                varying vec2 vTextCoord;
+                void main() {
+                   gl_Position = uMatrix * aPosition;
+                   vTextCoord = aTextCoord;
+                }</string>
+
+     <string name="basic_fragment_shader">precision mediump float;
+                uniform sampler2D uTexture;
+                varying vec2 vTextCoord;
+                void main() {
+                   gl_FragColor = texture2D(uTexture, vTextCoord);
+                }</string>
+
+    <string name="bloom_fragment_shader">precision mediump float;
+                uniform sampler2D uTexture;
+                varying vec2 vTextCoord;
+                void main() {
+                   vec4 sum = vec4(0, 0, 0, 0);
+                   int x = 0;
+                   int y = 0;
+                   vec4 color = texture2D(uTexture, vTextCoord);
+
+                   for(y = -2; y &lt; 2; y++) {
+      for(x = -2; x &lt; 2; x++) {
+                       vec2 offset = vec2(x, y);
+                       sum += texture2D(uTexture, vTextCoord + offset);
+                   }
+      }
+                   gl_FragColor = (sum / 25.0f) + color;
+                }</string>
+
+    <string name="blur_fragment_shader">precision mediump float;
+                uniform sampler2D uTexture;
+                varying vec2 vTextCoord;
+                void main() {
+                   vec4 sum = vec4(0, 0, 0, 0);
+                   int x = 0;
+                    int y = 0;
+                   vec4 color = texture2D(uTexture, vTextCoord);
+                   for( y = -2; y &lt; 2; y++) {
+                        for(x = -2; x &lt; 2; x++) {
+                            vec2 offset = vec2(x, y);
+                            sum += texture2D(uTexture, vTextCoord + offset);
+                        }
+                    }
+                   gl_FragColor = (sum / 25.0f);
+                }</string>
+</resources>
