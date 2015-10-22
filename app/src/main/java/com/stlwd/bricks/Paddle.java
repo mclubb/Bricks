@@ -30,8 +30,8 @@ public class Paddle extends Sprite {
         if( this.x - (width/2.0f) < 0)
             this.x = (width/2.0f);
 
-        if( this.x + (width/2.0f) > 600 )
-	    this.x = 600 - (width/2.0f);
+        if( this.x + (width/2.0f) > 800 )
+	    this.x = 800 - (width/2.0f);
     }
 
     public void Move(float direction ) {
@@ -45,7 +45,7 @@ public class Paddle extends Sprite {
         if( this.x - (width/2.0f) < 0)
             this.x = (width/2.0f);
 
-        if( this.x + (width/2.0f) > 600 )
-            this.x = 600 - (width/2.0f);
+        if( this.x + (width/2.0f) > 800 )
+            this.x = 800 - (width/2.0f);
     }
 }

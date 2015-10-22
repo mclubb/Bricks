@@ -240,7 +240,7 @@ public class BBRenderer implements Renderer {
 
         // Checking the bounds for the ball
         RectF ballRect = mBall.GetBounds();
-        RectF boundsRect = new RectF(0, 100, 800, 600);
+        RectF boundsRect = new RectF(0, 100, 600, 800);
         // Check left and right walls
         if( ballRect.right > boundsRect.right || ballRect.left < boundsRect.left) {
             mBall.changeX();
@@ -418,8 +418,7 @@ public class BBRenderer implements Renderer {
 
         score = 0;
 
-        mGameScene = GAMESCENE.TITLE;
-	SetupNewGame();
+        mGameScene = GAMESCENE.MENU;
     }
 
     public void SetupLives() {
@@ -450,9 +449,9 @@ public class BBRenderer implements Renderer {
 
     public void loadGameObjects() {
 	border = new Border(300, 55, 0, 600, 8, textures[0], 201/512.0f, 47/512.0f, 501/512.0f, 79/512.0f, mContext); 
-        background = new Sprite(400, 300, -1, 800, 600, textures[1], 0, 0, 1, 1, mContext);
-        mPaddle = new Paddle(100, 575, 0, 100, 18, textures[0], 0, 443 / 512.0f, 78 / 512.0f, 463 / 512.0f, mContext);
-        mBall = new Ball(100, 560, 0, 15, 15, textures[0], 330 / 512.0f, 490 / 512.0f, 345 / 512.0f, 505 / 512.0f, mContext);
+        background = new Sprite(300, 400, -1, 600, 800, textures[1], 0, 0, 1, 1, mContext);
+        mPaddle = new Paddle(100, 775, 0, 100, 18, textures[0], 0, 443 / 512.0f, 78 / 512.0f, 463 / 512.0f, mContext);
+        mBall = new Ball(100, 760, 0, 15, 15, textures[0], 330 / 512.0f, 490 / 512.0f, 345 / 512.0f, 505 / 512.0f, mContext);
     }
 
     public void loadGameOverObjects() {

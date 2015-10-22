@@ -51,7 +51,7 @@ public class Ball extends Sprite {
         Reset = true;
         resetTimer = 0.0f;
         x = 300 - (width/2.0f);
-        y = 700;
+        y = 500;
 
         velX = 3.5f;
         velY = -7.5f;
