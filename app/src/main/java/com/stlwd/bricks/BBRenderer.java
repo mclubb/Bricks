@@ -351,7 +351,7 @@ public class BBRenderer implements Renderer {
         }
 
         Random r = new Random();
-        mMinions.add(new Minion(640, 800, 0, 80, 150, textures[0], 320/512.0f, 83/512.0f, 400/512.0f, 232/512.0f, mContext));
+        mMinions.add(new Minion(840, 600, 0, 80, 150, textures[0], 320/512.0f, 83/512.0f, 400/512.0f, 232/512.0f, mContext));
     }
 
     public void Draw() {
