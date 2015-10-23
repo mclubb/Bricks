@@ -133,11 +133,20 @@ public class BBRenderer implements Renderer {
             // Check to see if ACTION_UP and X, Y is in the play button
             if( event.getAction() == MotionEvent.ACTION_UP) {
 
-                if( ny > 340 && ny < 457 && nx < 270) {
+                //if( ny > 340 && ny < 457 && nx < 270) {
                     // Lets Play a Game
-                    SetupNewGame();
-                    mGameScene = GAMESCENE.GAME;
-                }
+                //    SetupNewGame();
+                //    mGameScene = GAMESCENE.GAME;
+                //}
+
+		for(Sprite s : menuObjects) {
+			if( s.GetBounds().contains(nx, ny) ) {
+				MenuItem mi = (MenuItem)s;
+				level = mi.GetLevelId();
+				SetupNewGame();
+				mGameScene = GAMESCENE.GAME;
+			}
+		}
             }
         }
 
@@ -374,6 +383,8 @@ public class BBRenderer implements Renderer {
             case MENU:
                 MenuDraw();
                 break;
+            case LEVELCOMPLETE:
+                GameOverDraw();
             case GAMEOVER:
                 GameOverDraw();
                 break;
