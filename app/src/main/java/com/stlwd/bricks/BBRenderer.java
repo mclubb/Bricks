@@ -60,6 +60,7 @@ public class BBRenderer implements Renderer {
 
     List<Sprite> titleObjects;
     List<Sprite> menuObjects;
+    List<MenuItem> menuLevelObjects;
     List<Sprite> gameOverObjects;
 
     int score;
@@ -93,6 +94,7 @@ public class BBRenderer implements Renderer {
         backgroundSpinner = new ArrayList<SpriteToo>();
         titleObjects = new ArrayList<Sprite>();
         menuObjects = new ArrayList<Sprite>();
+        menuLevelObjects = new ArrayList<MenuItem>();
         gameOverObjects = new ArrayList<Sprite>();
         mMinions = new ArrayList<Minion>();
         mLives = new ArrayList<Sprite>();
@@ -139,9 +141,8 @@ public class BBRenderer implements Renderer {
                 //    mGameScene = GAMESCENE.GAME;
                 //}
 
-		for(Sprite s : menuObjects) {
-			if( s.GetBounds().contains(nx, ny) ) {
-				MenuItem mi = (MenuItem)s;
+		for(MenuItem mi : menuLevelObjects) {
+			if( mi.GetBounds().contains(nx, ny) && !mi.IsLocked() ) {
 				level = mi.GetLevelId();
 				SetupNewGame();
 				mGameScene = GAMESCENE.GAME;
@@ -530,9 +531,9 @@ public class BBRenderer implements Renderer {
 	for(int a = 0; a < 3; a++)
 	for(int i =0; i < 5; i++ ) {
 		if( a * 5 + i <=  l ) {
-			menuObjects.add( new MenuItem((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, textures[4], mContext, false, a*5 + i) );
+			menuLevelObjects.add( new MenuItem((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, textures[4], mContext, false, a*5 + i) );
 		} else {
-			menuObjects.add( new MenuItem((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, textures[4], mContext, true, a*5 + i) );
+			menuLevelObjects.add( new MenuItem((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, textures[4], mContext, true, a*5 + i) );
 		}
 	}
     }
@@ -560,6 +561,10 @@ public class BBRenderer implements Renderer {
 
     public void MenuDraw() {
         for(Sprite s : menuObjects) {
+            s.Draw(mProjectionMatrix);
+        }
+
+        for(MenuItem s : menuLevelObjects) {
             s.Draw(mProjectionMatrix);
         }
     }

@@ -6,11 +6,15 @@ import android.content.Context;
  * Created by mike.clubb on 10/7/15.
  */
 public class MenuItem extends Sprite {
+
 	int mLevelId = 0;
+	boolean mLocked = false;
+
     public MenuItem (float x, float y, float z, int textureId, Context context, boolean locked, int levelId) {
         super(x,y, z, 100, 100, textureId, 139/1024.0f, 170/778.0f, 186/1024.0f, 219/778.0f, context );
 
-	if( locked )
+	mLocked = locked;
+	if( mLocked )
 	{
         	uv_x = 355/1024.0f;
        		uv_y =	170/778.0f;
@@ -21,6 +25,10 @@ public class MenuItem extends Sprite {
 	}
 
 	mLevelId = levelId;
+    }
+
+    public boolean IsLocked() {
+	    return mLocked;
     }
     
     public int GetLevelId() {
