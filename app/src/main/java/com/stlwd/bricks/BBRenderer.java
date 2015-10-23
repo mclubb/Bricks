@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -59,7 +61,6 @@ public class BBRenderer implements Renderer {
     List<Sprite> titleObjects;
     List<Sprite> menuObjects;
     List<Sprite> gameOverObjects;
-    Sprite border;
 
     int score;
 
@@ -230,9 +231,14 @@ public class BBRenderer implements Renderer {
 
 
         if (mBricks.size() == 0) {
-            level++;
-            AnimateToLevel(level);
-            return;
+            	level++;
+		// TODO Write to a file showing that the level has been completed
+	
+		// Setup the GameScene LevelComplete	
+		mGameScene = GAMESCENE.LEVELCOMPLETE;
+		
+            	//AnimateToLevel(level);
+           	 return;
         }
 
 	mPaddle.Update();
@@ -378,7 +384,6 @@ public class BBRenderer implements Renderer {
 
     public void GameDraw2D() {
         background.Draw(mProjectionMatrix);
-	border.Draw(mProjectionMatrix);
         mPaddle.Draw(mProjectionMatrix);
         mBall.Draw(mProjectionMatrix);
 
@@ -449,7 +454,6 @@ public class BBRenderer implements Renderer {
     }
 
     public void loadGameObjects() {
-	border = new Border(300, 55, 0, 600, 8, textures[0], 201/512.0f, 47/512.0f, 501/512.0f, 79/512.0f, mContext); 
         background = new Sprite(400, 300, -1, 800, 600, textures[1], 0, 0, 1, 1, mContext);
         mPaddle = new Paddle(100, 575, 0, 100, 18, textures[0], 0, 443 / 512.0f, 78 / 512.0f, 463 / 512.0f, mContext);
         mBall = new Ball(100, 560, 0, 15, 15, textures[0], 330 / 512.0f, 490 / 512.0f, 345 / 512.0f, 505 / 512.0f, mContext);
@@ -478,6 +482,32 @@ public class BBRenderer implements Renderer {
     }
 
     public void loadMenuObjects() {
+		String level_number = "";
+		int l = 0;
+		FileInputStream inputStream;
+		FileOutputStream outputStream;
+	// We need to get current level passed
+	try {
+		    inputStream = mContext.openFileInput("level_completed.txt");
+		if( inputStream.read(level_number.getBytes()) == -1) {
+			level_number = "1";
+			outputStream = mContext.openFileOutput("level_completed.txt", Context.MODE_PRIVATE);
+			outputStream.write(level_number.getBytes());
+			outputStream.close();
+		} 
+		inputStream.close();
+
+
+		try {
+			l = Integer.parseInt(level_number);
+		} catch (Exception e) { }
+
+	} catch (Exception e) { }
+
+
+	//This is for writting to the file
+	////FileOutputStream outputStream = openFileOutput('level_completed.txt', Context.MODE_PRIVATE);
+
 	    menuObjects.clear();
 	// Load the main window
 	menuObjects.add( new Sprite(400, 300, 0, 800, 600, textures[3], 215.0f/819.0f, 32.0f/1024.0f, 405.0f/819.0f, 184.0f/1024.0f, mContext));
@@ -488,10 +518,10 @@ public class BBRenderer implements Renderer {
 	// Load the levels that can be selected
 	for(int a = 0; a < 3; a++)
 	for(int i =0; i < 5; i++ ) {
-		if( a * 5 + i <  4 ) {
-			menuObjects.add( new Sprite((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, 100, 100, textures[4], 139/1024.0f, 170/778.0f, 186/1024.0f, 219/778.0f, mContext) );
+		if( a * 5 + i <=  l ) {
+			menuObjects.add( new MenuItem((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, textures[4], mContext, false, a*5 + i) );
 		} else {
-			menuObjects.add( new Sprite((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, 100, 100, textures[4], 355/1024.0f, 170/778.0f, 402/1024.0f, 219/778.0f, mContext) );
+			menuObjects.add( new MenuItem((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, textures[4], mContext, true, a*5 + i) );
 		}
 	}
     }
