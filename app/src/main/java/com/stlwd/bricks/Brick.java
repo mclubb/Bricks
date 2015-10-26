@@ -14,12 +14,25 @@ public class Brick extends Sprite {
 
     public boolean isAlive = true;
     public boolean isSpecial;
+    int mBrickId = 0;
     List<RectF> uvs;
+    List<RectF> brickUVS;
 
-    public Brick(float x, float y, float z, float w, float h, int textureId, float uv_x, float uv_y, float uv_w, float uv_h, boolean si, Context context) {
-        super(x, y, z, w, h, textureId, uv_x, uv_y, uv_w, uv_h, context);
+    public Brick(float x, float y, float z, int textureId,  boolean si, Context context, int brick_id) {
+        super(x, y, z, 80, 23, textureId, 0, 0, 0, 0, context);
 
+	setBrickUVS();
+
+	mBrickId = brick_id;
         isSpecial = si;
+
+        RectF uv = brickUVS.get(brick_id);
+
+        uv_x = uv.left;
+        uv_y = uv.top;
+        uv_w = uv.right;
+        uv_h = uv.bottom;
+        RefreshTexture();
 
         setupExtraUVS();
     }
@@ -39,6 +52,14 @@ public class Brick extends Sprite {
         uv_w = uv.right;
         uv_h = uv.bottom;
         RefreshTexture();
+    }
+
+    public void setBrickUVS() {
+	brickUVS = new ArrayList<RectF>();
+	brickUVS.add(new RectF(0, 469/512.0f, 80/512.0f, 488/512.0f));
+	brickUVS.add(new RectF(0, 492/512.0f, 80/512.0f, 1));
+	brickUVS.add(new RectF(84/512.0f, 492/512.0f, 162/512.0f, 1));
+	brickUVS.add(new RectF(84/512.0f, 469/512.0f, 162/512.0f, 488/512.0f));
     }
 
     public void setupExtraUVS() {

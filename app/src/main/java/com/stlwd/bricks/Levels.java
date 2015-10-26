@@ -13,7 +13,13 @@ public class Levels
         level.add(new Vector3(120, 120, 0));
         level.add(new Vector3(240, 120, 0));
         level.add(new Vector3(360, 120, 0));
-	    levels.add( level );
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
 
         level = new ArrayList<Vector3>();
         level.add(new Vector3(120, 240, 0));
@@ -26,6 +32,115 @@ public class Levels
         level.add(new Vector3(240, 360, 0));
         level.add(new Vector3(360, 360, 0));
         levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+	
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
+        level = new ArrayList<Vector3>();
+        level.add(new Vector3(120, 120, 0));
+        level.add(new Vector3(240, 120, 0));
+        level.add(new Vector3(360, 120, 0));
+	levels.add( level );
+
     }
 
     public List<Vector3> GetLevel(int level)

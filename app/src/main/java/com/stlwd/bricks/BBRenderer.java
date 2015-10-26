@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 
+import java.io.File;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -61,6 +64,7 @@ public class BBRenderer implements Renderer {
     List<Sprite> titleObjects;
     List<Sprite> menuObjects;
     List<MenuItem> menuLevelObjects;
+    List<LevelCompleteItem> levelCompleteButtons; 
     List<Sprite> gameOverObjects;
 
     int score;
@@ -68,6 +72,7 @@ public class BBRenderer implements Renderer {
     GAMESCENE mGameScene;
 
     int level = 0;
+
     boolean isBricks = true;
 
     public BBRenderer(Context context) {
@@ -96,6 +101,7 @@ public class BBRenderer implements Renderer {
         menuObjects = new ArrayList<Sprite>();
         menuLevelObjects = new ArrayList<MenuItem>();
         gameOverObjects = new ArrayList<Sprite>();
+        levelCompleteButtons = new ArrayList<LevelCompleteItem>();
         mMinions = new ArrayList<Minion>();
         mLives = new ArrayList<Sprite>();
         mLevels = new Levels();
@@ -103,6 +109,53 @@ public class BBRenderer implements Renderer {
 
         camera = new Camera(0, 0, -1, 0, 0, 0, 0, 1, 0);
         LoadContent();
+    }
+
+    public void Save(String path, String s) {
+	String LevelFromSaveFile = GetLevelFromSave(path);
+
+	int levelFromGame = 0;
+	int levelFromSave = 0;
+
+	try {
+		levelFromGame = Integer.parseInt(s);
+	} catch( Exception e) {}
+
+	try {
+		levelFromSave = Integer.parseInt(LevelFromSaveFile);
+	} catch( Exception e) {}	
+
+	if( levelFromGame > levelFromSave ) { 
+		// Write the current level to the file
+		File file = new File(path);
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(file);
+			fos.write(s.getBytes());
+			fos.close();
+		} catch( Exception e) {}
+	}
+    }
+
+    public String GetLevelFromSave(String path) {
+	    Log.d("READER", "GETLEVELFROMSAVE: " + path);
+	String sLevel = "";
+	File file = new File(path);
+	FileInputStream fis = null;
+	InputStreamReader isr = null;
+	BufferedReader br = null;
+	String brString;
+	try {
+		fis = new FileInputStream(file);
+		isr = new InputStreamReader(fis);
+		br = new BufferedReader(isr);
+		while( (brString = br.readLine() ) != null ) {
+			sLevel += brString;
+		}
+		fis.close();
+	} catch( Exception e) { Log.e("READER", "GETLEVELFROMSAVE FAILED", e);}
+	if( sLevel.equals("") ) { sLevel = "0"; }
+	return sLevel;
     }
 
     public void handleTouch(MotionEvent event) {
@@ -135,12 +188,6 @@ public class BBRenderer implements Renderer {
             // Check to see if ACTION_UP and X, Y is in the play button
             if( event.getAction() == MotionEvent.ACTION_UP) {
 
-                //if( ny > 340 && ny < 457 && nx < 270) {
-                    // Lets Play a Game
-                //    SetupNewGame();
-                //    mGameScene = GAMESCENE.GAME;
-                //}
-
 		for(MenuItem mi : menuLevelObjects) {
 			if( mi.GetBounds().contains(nx, ny) && !mi.IsLocked() ) {
 				level = mi.GetLevelId();
@@ -152,6 +199,27 @@ public class BBRenderer implements Renderer {
         }
 
         if( mGameScene == GAMESCENE.GAMEOVER ) {
+		for(LevelCompleteItem lci : levelCompleteButtons) {
+			if( lci.GetBounds().contains(nx, ny)) {
+				// Get the action so we know what to do
+				int action = lci.GetActionCode();
+
+				switch(action) {
+					case 0: // Home
+						mGameScene = GAMESCENE.TITLE;
+						break;
+					case 1: // Menu
+						loadMenuObjects();
+						mGameScene = GAMESCENE.MENU;
+						break;
+					case 2: // Play
+						SetupNewGame();
+						mGameScene = GAMESCENE.GAME;
+						break;
+				}
+				break;
+			}
+		}
             /*if( event.getAction() == MotionEvent.ACTION_UP ) {
                 if( ny > 350 && ny < 425 ) {
                     SetupNewGame();
@@ -218,6 +286,8 @@ public class BBRenderer implements Renderer {
         }
     }
 
+    
+
     List<Brick> BricksToRemove;
     List<SpecialItem>SpecialItemsToRemove;
     List<Minion>MinionsToRemove;
@@ -241,11 +311,15 @@ public class BBRenderer implements Renderer {
 
 
         if (mBricks.size() == 0) {
-            	level++;
 		// TODO Write to a file showing that the level has been completed
+		String path = mContext.getExternalFilesDir(null) + "/data";
+		String fileName = path + "/level_completed.txt";
+		Save(fileName, "" + level);
+
 	
 		// Setup the GameScene LevelComplete	
-		mGameScene = GAMESCENE.LEVELCOMPLETE;
+		loadMenuObjects();
+		mGameScene = GAMESCENE.GAMEOVER;
 		
             	//AnimateToLevel(level);
            	 return;
@@ -459,7 +533,7 @@ public class BBRenderer implements Renderer {
         mBricks.clear();
         levelList = mLevels.GetLevel(level);
         for(Vector3 v : levelList) {
-            mBricks.add(new Brick(v.x, v.y, v.z, 80, 15, textures[0], 0.0f, 470.0f/512.0f, 80.0f/512.0f, 483.0f/512.0f, false, mContext));
+            mBricks.add(new Brick(v.x, v.y, v.z, textures[0], false, mContext, 1));
         }
         mBall.ResetBall();
         isBricks = true;
@@ -483,42 +557,45 @@ public class BBRenderer implements Renderer {
 	gameOverObjects.add( new Sprite(400, 300, 0, 350, 204, textures[3], 473.0f/819.0f, 770.0f/1024.0f, 573.0f/819.0f, 821.0f/1024.0f, mContext));
 	
 	// Home
-	gameOverObjects.add( new Sprite(250, 525, 0, 100, 100, textures[4], 292/1024.0f, 249/778.0f, 337/1024.0f, 295/778.0f, mContext) );
+	levelCompleteButtons.add( new LevelCompleteItem(250, 525, 0, textures[4], mContext, 0) );
 	
 	// Menu
-	gameOverObjects.add( new Sprite(400, 525, 0, 100, 100, textures[4], 50/1024.0f, 472/778.0f, 95/1024.0f, 519/778.0f, mContext) );
+	levelCompleteButtons.add( new LevelCompleteItem(400, 525, 0, textures[4], mContext, 1) );
 	
 	// Play
-	gameOverObjects.add( new Sprite(550, 525, 0, 100, 100, textures[4], 50/1024.0f, 249/778.0f, 95/1024.0f, 295/778.0f, mContext) );
+	levelCompleteButtons.add( new LevelCompleteItem(550, 525, 0, textures[4], mContext, 2) );
 	 
     }
 
     public void loadMenuObjects() {
+	String path = mContext.getExternalFilesDir(null) + "/data";
+	String fileName = path + "/level_completed.txt";
+	File levelDir = new File(path);
+	    if( !levelDir.exists() ) {
+		    try {
+		   	Log.d("READER", "TRYING TO CREATE DIRECTORY");
+		    	levelDir.mkdirs();
+		    } catch (Exception e) { Log.e("READER", "FAILED TO CREATE DIRECTORY", e); }
+	    }
+	    
+	    File levelFile = new File(fileName);
+	    if( !levelFile.exists() ) {
+		try {
+		    	Log.d("READER", "TRYING TO CREATE FILE");
+			levelFile.createNewFile();
+		}
+		catch(Exception e) { Log.e("READER", "FAILED TO CREATE NEW FILE", e); }
+	    }
+
 		String level_number = "";
 		int l = 0;
-		FileInputStream inputStream;
-		FileOutputStream outputStream;
 	// We need to get current level passed
-	try {
-		    inputStream = mContext.openFileInput("level_completed.txt");
-		if( inputStream.read(level_number.getBytes()) == -1) {
-			level_number = "1";
-			outputStream = mContext.openFileOutput("level_completed.txt", Context.MODE_PRIVATE);
-			outputStream.write(level_number.getBytes());
-			outputStream.close();
-		} 
-		inputStream.close();
-
-
+		level_number = GetLevelFromSave(fileName); 
+		Log.d("READER", "LEVEL NUMBER: " + level_number);
 		try {
 			l = Integer.parseInt(level_number);
 		} catch (Exception e) { }
 
-	} catch (Exception e) { }
-
-
-	//This is for writting to the file
-	////FileOutputStream outputStream = openFileOutput('level_completed.txt', Context.MODE_PRIVATE);
 
 	    menuObjects.clear();
 	// Load the main window
@@ -531,9 +608,9 @@ public class BBRenderer implements Renderer {
 	for(int a = 0; a < 3; a++)
 	for(int i =0; i < 5; i++ ) {
 		if( a * 5 + i <=  l ) {
-			menuLevelObjects.add( new MenuItem((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, textures[4], mContext, false, a*5 + i) );
+			menuLevelObjects.add( new MenuItem((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, textures[4], mContext, false, a*5 + i + 1) );
 		} else {
-			menuLevelObjects.add( new MenuItem((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, textures[4], mContext, true, a*5 + i) );
+			menuLevelObjects.add( new MenuItem((i * 100) + 130 + (30 * i), (a * 100) + 200 + (30 * a), 0, textures[4], mContext, true, a*5 + i + 1) );
 		}
 	}
     }
@@ -577,6 +654,10 @@ public class BBRenderer implements Renderer {
         for(Sprite s : gameOverObjects) {
             s.Draw(mProjectionMatrix);
         }
+
+	for(LevelCompleteItem lci : levelCompleteButtons) {
+		lci.Draw(mProjectionMatrix);
+	}
     }
 
     int screenTime;
