@@ -220,17 +220,6 @@ public class BBRenderer implements Renderer {
 				break;
 			}
 		}
-            /*if( event.getAction() == MotionEvent.ACTION_UP ) {
-                if( ny > 350 && ny < 425 ) {
-                    SetupNewGame();
-                    mGameScene = GAMESCENE.GAME;
-                }
-
-                if( ny > 542 && ny < 650 ) {
-                    mGameScene = GAMESCENE.MENU;
-                }
-            }
-	    */
         }
     }
 
@@ -533,7 +522,7 @@ public class BBRenderer implements Renderer {
         mBricks.clear();
         levelList = mLevels.GetLevel(level);
         for(Vector3 v : levelList) {
-            mBricks.add(new Brick(v.x, v.y, v.z, textures[0], false, mContext, 1));
+            mBricks.add(new Brick(v.x, v.y, 0, textures[0], false, mContext, (int)v.z));
         }
         mBall.ResetBall();
         isBricks = true;
